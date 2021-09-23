@@ -27,173 +27,234 @@
 @else@*/
 
 const { findModuleByProps, findAllModules } = BdApi;
-const VCContextMenu = findAllModules(m => m.default && m.default.displayName == 'ChannelListVoiceChannelContextMenu')[0];
-const { getVoiceStatesForChannel } = findModuleByProps('getVoiceStatesForChannel');
-const DiscordPermissions = findModuleByProps('Permissions').Permissions;
-const { getVoiceChannelId } = findModuleByProps('getVoiceChannelId');
-const Menu = findModuleByProps('MenuGroup', 'MenuItem');
-const Permissions = findModuleByProps('getHighestRole');
-const { getChannel } = findModuleByProps('getChannel');
-const knownGames = [
-    {
-        id: "youtube",
-        label: "Youtube Together",
-        application_id: "755600276941176913"
-    },
-    {
-        id: "poker",
-        label: "Poker Night",
-        application_id: "755827207812677713"
-    },
-    {
-        id: "betrayal",
-        label: "Betrayal.io",
-        application_id: "773336526917861400"
-    },
-    {
-        id: "fishing",
-        label: "Fishington.io",
-        application_id: "814288819477020702"
-    },
-    {
-        id: "chess",
-        label: "Chess",
-        application_id: "832012586023256104"
-    }
-];
-const { getSelfEmbeddedActivityForChannel } = findModuleByProps("getSelfEmbeddedActivityForChannel");
-const { GENERIC_EVENT_EMBEDDED_APPS } = findModuleByProps("GENERIC_EVENT_EMBEDDED_APPS");
+const VCContextMenu = findAllModules(
+  (m) =>
+    m.default && m.default.displayName == "ChannelListVoiceChannelContextMenu"
+)[0];
+
+const Menu = findModuleByProps("MenuGroup", "MenuItem");
+
+const { getSelfEmbeddedActivityForChannel } = findModuleByProps(
+  "getSelfEmbeddedActivityForChannel"
+);
+
 const { startEmbeddedActivity } = findModuleByProps("startEmbeddedActivity");
 const { transitionTo } = findModuleByProps("transitionTo");
 const { Routes } = findModuleByProps("Routes");
 
 const config = {
-   info: {
-      name: 'BetterDiscord-Together',
-      authors: [
-         {
-            name: 'kikots',
-            discord_id: '487773012481933314',
-         }
-      ],
-      version: '1.0.0',
-      description: 'A Plugin to Play the new Discord Together Games.',
-   }
+  info: {
+    name: "BetterDiscord-Together",
+    authors: [
+      {
+        name: "kikots",
+        discord_id: "487773012481933314",
+      },
+    ],
+    version: "1.0.0",
+    description: "A Plugin to Play the new Discord Together Games.",
+  },
 };
 
-module.exports = !global.ZeresPluginLibrary ? class {
-   getName() {
-      return config.info.name;
-   }
-
-   getAuthor() {
-      return config.info.authors[0].name;
-   }
-
-   getVersion() {
-      return config.info.version;
-   }
-
-   getDescription() {
-      return config.info.description;
-   }
-
-   load() {
-      BdApi.showConfirmationModal('Library Missing', `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`, {
-         confirmText: 'Download Now',
-         cancelText: 'Cancel',
-         onConfirm: () => {
-            require('request').get('https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js', async (error, response, body) => {
-               if (error) return require('electron').shell.openExternal('https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js');
-               await new Promise(r => require('fs').writeFile(require('path').join(BdApi.Plugins.folder, '0PluginLibrary.plugin.js'), body, r));
-            });
-         }
-      });
-   }
-
-   start() { }
-
-   stop() { }
-} : (([Plugin, API]) => {
-   const { Patcher, DiscordModules: { React } } = API;
-
-   return class BetterDiscordTogether extends Plugin {
-      constructor() {
-         super();
+module.exports = !global.ZeresPluginLibrary
+  ? class {
+      getName() {
+        return config.info.name;
       }
-      
-      start() {
-         Patcher.after(VCContextMenu, 'default', (_, args, res) => {
+
+      getAuthor() {
+        return config.info.authors[0].name;
+      }
+
+      getVersion() {
+        return config.info.version;
+      }
+
+      getDescription() {
+        return config.info.description;
+      }
+
+      load() {
+        BdApi.showConfirmationModal(
+          "Library Missing",
+          `The library plugin needed for ${config.info.name} is missing. Please click Download Now to install it.`,
+          {
+            confirmText: "Download Now",
+            cancelText: "Cancel",
+            onConfirm: () => {
+              require("request").get(
+                "https://rauenzi.github.io/BDPluginLibrary/release/0PluginLibrary.plugin.js",
+                async (error, response, body) => {
+                  if (error)
+                    return require("electron").shell.openExternal(
+                      "https://betterdiscord.net/ghdl?url=https://raw.githubusercontent.com/rauenzi/BDPluginLibrary/master/release/0PluginLibrary.plugin.js"
+                    );
+                  await new Promise((r) =>
+                    require("fs").writeFile(
+                      require("path").join(
+                        BdApi.Plugins.folder,
+                        "0PluginLibrary.plugin.js"
+                      ),
+                      body,
+                      r
+                    )
+                  );
+                }
+              );
+            },
+          }
+        );
+      }
+
+      start() {}
+
+      stop() {}
+    }
+  : (([Plugin, API]) => {
+      const {
+        Patcher,
+        DiscordModules: { React },
+      } = API;
+
+      return class BetterDiscordTogether extends Plugin {
+        constructor() {
+          super();
+        }
+
+        start() {
+          Patcher.after(VCContextMenu, "default", (_, args, res) => {
             const selectedChannel = args[0].channel;
 
-            if (!selectedChannel || !selectedChannel.guild_id || getSelfEmbeddedActivityForChannel(selectedChannel.id)) return res;
+            if (
+              !selectedChannel ||
+              !selectedChannel.guild_id ||
+              getSelfEmbeddedActivityForChannel(selectedChannel.id)
+            )
+              return res;
 
             const noNamed = [];
 
             const items = [];
-
-            Array.from(GENERIC_EVENT_EMBEDDED_APPS).map((application_id, i) => {
-                const known = knownGames.find((o) => o.application_id === application_id);
-                if (known) {
-                    items.push(
-                        this.createInviteEl(
-                            {
-                                id: known.id,
-                                label: known.label,
-                                application_id
-                            },
-                            selectedChannel
-                        )
-                    );
-                } else {
-                    noNamed.push(
-                        this.createInviteEl(
-                            {
-                                id: `unnamed-${i + 1 - knownGames.length}`,
-                                label: `Unnamed${i + 1 - knownGames.length}`,
-                                application_id
-                            },
-                            selectedChannel
-                        )
-                    );
-                }
-            });
-
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "youtube",
+                  label: "Youtube Together",
+                  application_id: "880218394199220334",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "youtubedev",
+                  label: "Youtube Together Dev",
+                  application_id: "880218832743055411",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "xbox",
+                  label: "Xbox Together?",
+                  application_id: "438122941302046720",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "youtubeprod",
+                  label: "Youtube Together Production?",
+                  application_id: "755600276941176913",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "poker",
+                  label: "Poker Night",
+                  application_id: "755827207812677713",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "endgame",
+                  label: "End Game",
+                  application_id: "773336526917861400",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "fishington",
+                  label: "Fishington",
+                  application_id: "814288819477020702",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "chess",
+                  label: "Chess in the Park",
+                  application_id: "832012774040141894",
+                },
+                selectedChannel
+              )
+            );
             if (noNamed.length)
-                items.push(
-                    React.createElement(Menu.MenuItem, {
-                        id: "unnamed-menu",
-                        label: "Unnamed Games",
-                        children: noNamed
-                    })
-                );
+              items.push(
+                React.createElement(Menu.MenuItem, {
+                  id: "unnamed-menu",
+                  label: "Unnamed Games",
+                  children: noNamed,
+                })
+              );
 
             res.props.children.splice(
-                res.props.children.length - 1,
-                0,
-                React.createElement(Menu.MenuItem, {
-                    id: "discord-together-menu",
-                    label: "Discord Together",
-                    children: items
-                })
+              res.props.children.length - 1,
+              0,
+              React.createElement(Menu.MenuItem, {
+                id: "discord-together-menu",
+                label: "Discord Together",
+                children: items,
+              })
             );
 
             return res;
-         });
-      };
-      createInviteEl(game, selectedChannel) {
-        return React.createElement(Menu.MenuItem, {
+          });
+        }
+        createInviteEl(game, selectedChannel) {
+          return React.createElement(Menu.MenuItem, {
             id: game.id,
             label: game.label,
             action: async () => {
-                await startEmbeddedActivity(selectedChannel.id, game.application_id);
+              await startEmbeddedActivity(
+                selectedChannel.id,
+                game.application_id
+              );
 
-                await transitionTo(Routes.CHANNEL(selectedChannel.guild_id, selectedChannel.id));
-            }
-        });
-    }
-      stop() {
-         Patcher.unpatchAll();
+              await transitionTo(
+                Routes.CHANNEL(selectedChannel.guild_id, selectedChannel.id)
+              );
+            },
+          });
+        }
+        stop() {
+          Patcher.unpatchAll();
+        }
       };
-   };
-})(global.ZeresPluginLibrary.buildPlugin(config));
+    })(global.ZeresPluginLibrary.buildPlugin(config));
