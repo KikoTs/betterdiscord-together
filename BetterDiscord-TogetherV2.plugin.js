@@ -41,8 +41,8 @@ const config = {
         discord_id: "487773012481933314",
       },
     ],
-    version: "1.0.0",
-    description: "A Plugin to Play the new Discord Together Games.",
+    version: "2.0.0",
+    description: "A Plugin to Play the new Discord Together Games. The more stable Version!",
   },
 };
 
@@ -119,7 +119,6 @@ module.exports = !global.ZeresPluginLibrary
         WATCH_YOUTUBE_PROD_APP_ID,
         XBOX_ACTIVITY_APPLICATION_ID
       } = API.WebpackModules.getByProps("YOUTUBE_APPLICATION_ID");
-      const ExperimentUtils = API.WebpackModules.getByProps("overrideBucket");
       const activitiesExperiment = API.WebpackModules.getModule((m => "2020-11_poker_night" === m.definition.id));
       const getEnabledAppIds = API.WebpackModules.getByProps("getEnabledAppIds");
 
@@ -147,7 +146,10 @@ module.exports = !global.ZeresPluginLibrary
               FISHINGTON_APPLICATION_ID,
               END_GAME_APPLICATION_ID,
               CHESS_IN_THE_PARK_APPLICATION_ID,
-              WATCH_YOUTUBE_PROD_APP_ID
+              WATCH_YOUTUBE_PROD_APP_ID,
+              "878067389634314250",
+              "879863976006127627",
+              "879863686565621790"
             ];
             return ret;
             
