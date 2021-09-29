@@ -188,6 +188,36 @@ module.exports = !global.ZeresPluginLibrary
             items.push(
               this.createInviteEl(
                 {
+                  id: "doodlecrew",
+                  label: "Doodle Crew",
+                  application_id: "878067389634314250",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "wordsnacks",
+                  label: "Word Snacks",
+                  application_id: "879863976006127627",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "lettertile",
+                  label: "Letter Tile",
+                  application_id: "879863686565621790",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
                   id: "endgame",
                   label: "End Game",
                   application_id: "773336526917861400",
@@ -211,6 +241,56 @@ module.exports = !global.ZeresPluginLibrary
                   id: "chess",
                   label: "Chess in the Park",
                   application_id: "832012774040141894",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "discordgame1",
+                  label: "Discord Game 1",
+                  application_id: "832012586023256104",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "discordgame2",
+                  label: "Discord Game 2",
+                  application_id: "832012682520428625",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "discordgame3",
+                  label: "Discord Game 3",
+                  application_id: "832012730599735326",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "discordgame4",
+                  label: "Discord Game 4",
+                  application_id: "832012774040141894",
+                },
+                selectedChannel
+              )
+            );
+            items.push(
+              this.createInviteEl(
+                {
+                  id: "browtf",
+                  label: "Join Ticket Embedded Apps?",
+                  application_id: "755827207812677713",
                 },
                 selectedChannel
               )
