@@ -29,9 +29,6 @@
 const { findModuleByProps, findAllModules } = BdApi;
 
 
-
-
-
 const config = {
   info: {
     name: "BetterDiscord-TogetherV2",
@@ -105,20 +102,62 @@ module.exports = !global.ZeresPluginLibrary
         Patcher,
         DiscordModules: { React },
       } = API;
-      const {
-        YOUTUBE_APPLICATION_ID,
-        POKER_NIGHT_APPLICATION_ID,
-        FISHINGTON_APPLICATION_ID,
-        END_GAME_APPLICATION_ID,
-        CHESS_IN_THE_PARK_APPLICATION_ID,
-        DISCORD_GAME_01_ID,
-        DISCORD_GAME_02_ID,
-        DISCORD_GAME_03_ID,
-        DISCORD_GAME_04_ID,
-        WATCH_YOUTUBE_DEV_APP_ID,
-        WATCH_YOUTUBE_PROD_APP_ID,
-        XBOX_ACTIVITY_APPLICATION_ID
-      } = API.WebpackModules.getByProps("YOUTUBE_APPLICATION_ID");
+      const DATA_MINED_GAMES = {
+        STABLE: {
+          "Watch YouTube": "880218394199220334",
+          "Poker Night": "755827207812677713",
+          "Fishington.io": "814288819477020702",
+          "Betrayal.io": "773336526917861400",
+          "Chess in the Park": "832012774040141894",
+          Putts: "832012854282158180",
+          "Doodle Crew": "878067389634314250",
+          "Letter Tile": "879863686565621790",
+          "Word Snacks": "879863976006127627",
+          "Fake Artist": "879864070101172255",
+          Awkword: "879863881349087252",
+          SpellCast: "852509694341283871"
+        },
+        DEV: {
+          "Old Youtube": "755600276941176913",
+          "Poker Night Staging": "763116274876022855",
+          "Poker Night Dev": "763133495793942528",
+          "Poker QA": "801133024841957428",
+          "Chess in the Park 2 Staging": "832012730599735326",
+          "Chess in the Park 2 Dev": "832012586023256104",
+          "Chess in the Park 2 QA": "832012815819604009",
+          "Chess in the Park 3 Staging": "832012938398400562",
+          "Chess in the Park 3 Dev": "832012682520428625",
+          "Chess in the Park 3 QA": "832012894068801636",
+          "Cheers in the Park": "832013003968348200",
+          "Watch YouTube Dev": "880218832743055411",
+          "iframe-playground": "880559245471408169",
+          "Doodle Crew Dev": "878067427668275241",
+          "Letter Tile Dev": "879863753519292467",
+          "Word Snacks Dev": "879864010126786570",
+          "Fake Artist Dev": "879864104980979792",
+          "Awkword Dev": "879863923543785532",
+          "Decoders Dev": "891001866073296967",
+          "SpellCast Staging": "893449443918086174"
+        },
+        NO_NAME: {
+          "Discord Game 10": "832013108234289153",
+          "Discord Game 11": "832025061657280566",
+          "Discord Game 12": "832025114077298718",
+          "Discord Game 13": "832025144389533716",
+          "Discord Game 14": "832025179659960360",
+          "Discord Game 15": "832025219526033439",
+          "Discord Game 16": "832025249335738428",
+          "Discord Game 17": "832025333930524692",
+          "Discord Game 18": "832025385159622656",
+          "Discord Game 19": "832025431280320532",
+          "Discord Game 20": "832025470685937707",
+          "Discord Game 21": "832025799590281238",
+          "Discord Game 22": "832025857525678142",
+          "Discord Game 23": "832025886030168105",
+          "Discord Game 24": "832025928938946590",
+          "Discord Game 25": "832025993019260929"
+        }
+      };
       const activitiesExperiment = API.WebpackModules.getModule((m => "2020-11_poker_night" === m.definition.id));
       const getEnabledAppIds = API.WebpackModules.getByProps("getEnabledAppIds");
 
@@ -128,53 +167,30 @@ module.exports = !global.ZeresPluginLibrary
         }
 
         async start() {
-          this.patchGuildRegion();
+          // this.patchGuildRegion();
           this.checkEnabledAppIds();
           this.enableExperiment();
         }
-        patchGuildRegion() {
-          API.Patcher.after(API.DiscordModules.GuildStore, "getGuild", ((_this, [props], ret) => {
-            if (!ret?.region) return;
-            ret.region = "us-west";
-          }));
-        }
+        // patchGuildRegion() {
+        //   API.Patcher.after(API.DiscordModules.GuildStore, "getGuild", ((_this, [props], ret) => {
+        //     if (!ret?.region) return;
+        //     ret.region = "us-west";
+        //   }));
+        // }
         checkEnabledAppIds() {
           API.Patcher.after(getEnabledAppIds, "getEnabledAppIds", ((_this, [props], ret) => {
-            ret = [
-              YOUTUBE_APPLICATION_ID,
-              POKER_NIGHT_APPLICATION_ID,
-              FISHINGTON_APPLICATION_ID,
-              END_GAME_APPLICATION_ID,
-              CHESS_IN_THE_PARK_APPLICATION_ID,
-              WATCH_YOUTUBE_PROD_APP_ID,
-              "878067389634314250",
-              "879863976006127627",
-              "879863686565621790"
-            ];
+            ret = [				
+              ...Object.values(DATA_MINED_GAMES.STABLE),
+              ...(true ? Object.values(DATA_MINED_GAMES.DEV) : []),
+              ...(true ? Object.values(DATA_MINED_GAMES.NO_NAME) : [])];
             return ret;
             
           }));
         }
         enableExperiment() {
           console.log('IWasStarted')
-          API.Patcher.after(activitiesExperiment, "useExperiment", ((_this, [props], ret) => {
-            if (![props][0].guildId) return ret;
-            if (!ret[0]?.enabledApplicationIds?.length) {
-              ret[0] = {  
-                enabledApplicationIds: [
-                  YOUTUBE_APPLICATION_ID,
-                  POKER_NIGHT_APPLICATION_ID,
-                  FISHINGTON_APPLICATION_ID,
-                  END_GAME_APPLICATION_ID,
-                  CHESS_IN_THE_PARK_APPLICATION_ID
-                ],
-                rtcPanelIconsOnly: true,
-                showDiscordGameTooltips: false,
-                enableActivities: true,
-                useNewInviteButton: true
-              };
-            }
-            return ret;
+          API.Patcher.after(getEnabledAppIds, "isActivitiesEnabled", ((_this, [props], ret) => {
+            return true;
           }));
         }
 
