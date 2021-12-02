@@ -1,6 +1,10 @@
 /**
- * @name BetterDiscord-TogetherV2
- */
+* @name Better Discord Together V2
+* @version 2.0.0
+* @description A Plugin to Play the new Discord Together Games. The more stable Version!
+* @author KikoTs
+* @source https://raw.githubusercontent.com/KikoTs/betterdiscord-together/main/BetterDiscord-TogetherV2.plugin.js
+*/
 
 /*@cc_on
 @if (@_jscript)
