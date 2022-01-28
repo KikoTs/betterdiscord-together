@@ -1,5 +1,5 @@
 /**
-* @name Better Discord Together V2
+* @name BetterDiscord-TogetherV2
 * @version 2.0.0
 * @description A Plugin to Play the new Discord Together Games. The more stable Version!
 * @author KikoTs
