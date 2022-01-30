@@ -110,15 +110,18 @@ module.exports = !global.ZeresPluginLibrary
         STABLE: {
           "Watch YouTube": "880218394199220334",
           "Poker Night": "755827207812677713",
-          "Fishington.io": "814288819477020702",
-          "Betrayal.io": "773336526917861400",
-          "Chess in the Park": "832012774040141894",
-          "Doodle Crew": "878067389634314250",
-          "Letter Tile": "879863686565621790",
-          "Word Snacks": "879863976006127627",
-          "Fake Artist": "879864070101172255",
-          Awkword: "879863881349087252",
-          SpellCast: "852509694341283871"
+	  "Fishington.io": "814288819477020702",
+	  "Betrayal.io": "773336526917861400",
+	  "Chess in the Park": "832012774040141894",
+	  "Checkers in the Park": "832013003968348200",
+	  "Doodle Crew": "878067389634314250",
+          "Sketch Heads": "902271654783242291",
+	  "Letter Tile": "879863686565621790",
+	  "Word Snacks": "879863976006127627",
+          "Sketchy Artist": "879864070101172255",
+	  Awkword: "879863881349087252",
+	  SpellCast: "852509694341283871",
+	  Ocho: "832025144389533716"
         },
         DEV: {
           "Old Youtube": "755600276941176913",
@@ -176,14 +179,13 @@ module.exports = !global.ZeresPluginLibrary
           API.Patcher.after(getEnabledAppIds, "getEnabledAppIds", ((_this, [props], ret) => {
             ret = [				
               ...Object.values(DATA_MINED_GAMES.STABLE),
-              ...(true ? Object.values(DATA_MINED_GAMES.DEV) : []),
-              ...(true ? Object.values(DATA_MINED_GAMES.NO_NAME) : [])];
+              ...(false ? Object.values(DATA_MINED_GAMES.DEV) : []), // Change to "true" to enable them.
+              ...(false ? Object.values(DATA_MINED_GAMES.NO_NAME) : [])]; // Change to "true" to enable them.
             return ret;
             
           }));
         }
         enableExperiment() {
-          console.log('IWasStarted')
           API.Patcher.after(getEnabledAppIds, "isActivitiesEnabled", ((_this, [props], ret) => {
             return true;
           }));
